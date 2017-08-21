@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="hangman_DBfirstModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categories">
+          <Key>
+            <PropertyRef Name="category_ID" />
+          </Key>
+          <Property Name="category_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="dificulty">
+          <Key>
+            <PropertyRef Name="dificulty_ID" />
+          </Key>
+          <Property Name="dificulty_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="word_category">
+          <Key>
+            <PropertyRef Name="word_category_ID" />
+          </Key>
+          <Property Name="word_ID" Type="int" Nullable="false" />
+          <Property Name="category_ID" Type="int" />
+          <Property Name="word_category_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="words">
+          <Key>
+            <PropertyRef Name="word_ID" />
+          </Key>
+          <Property Name="word_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="word" Type="nvarchar" MaxLength="50" />
+          <Property Name="difficulty_ID" Type="int" />
+        </EntityType>
+        <Association Name="category_CATEGORY">
+          <End Role="categories" Type="Self.categories" Multiplicity="0..1" />
+          <End Role="word_category" Type="Self.word_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="category_ID" />
+            </Principal>
+            <Dependent Role="word_category">
+              <PropertyRef Name="category_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="category_WORD">
+          <End Role="words" Type="Self.words" Multiplicity="1" />
+          <End Role="word_category" Type="Self.word_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="words">
+              <PropertyRef Name="word_ID" />
+            </Principal>
+            <Dependent Role="word_category">
+              <PropertyRef Name="word_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="dificultyID">
+          <End Role="dificulty" Type="Self.dificulty" Multiplicity="0..1" />
+          <End Role="words" Type="Self.words" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dificulty">
+              <PropertyRef Name="dificulty_ID" />
+            </Principal>
+            <Dependent Role="words">
+              <PropertyRef Name="difficulty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="hangman_DBfirstModelStoreContainer">
+          <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="dificulty" EntityType="Self.dificulty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="word_category" EntityType="Self.word_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="words" EntityType="Self.words" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="category_CATEGORY" Association="Self.category_CATEGORY">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="word_category" EntitySet="word_category" />
+          </AssociationSet>
+          <AssociationSet Name="category_WORD" Association="Self.category_WORD">
+            <End Role="words" EntitySet="words" />
+            <End Role="word_category" EntitySet="word_category" />
+          </AssociationSet>
+          <AssociationSet Name="dificultyID" Association="Self.dificultyID">
+            <End Role="dificulty" EntitySet="dificulty" />
+            <End Role="words" EntitySet="words" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="hangman_DBfirstModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_ID" />
+          </Key>
+          <Property Name="category_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="word_category" Relationship="Self.category_CATEGORY" FromRole="categories" ToRole="word_category" />
+        </EntityType>
+        <EntityType Name="dificulty">
+          <Key>
+            <PropertyRef Name="dificulty_ID" />
+          </Key>
+          <Property Name="dificulty_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="words" Relationship="Self.dificultyID" FromRole="dificulty" ToRole="words" />
+        </EntityType>
+        <EntityType Name="word_category">
+          <Key>
+            <PropertyRef Name="word_category_ID" />
+          </Key>
+          <Property Name="word_ID" Type="Int32" Nullable="false" />
+          <Property Name="category_ID" Type="Int32" />
+          <Property Name="word_category_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="category" Relationship="Self.category_CATEGORY" FromRole="word_category" ToRole="categories" />
+          <NavigationProperty Name="word" Relationship="Self.category_WORD" FromRole="word_category" ToRole="words" />
+        </EntityType>
+        <EntityType Name="word">
+          <Key>
+            <PropertyRef Name="word_ID" />
+          </Key>
+          <Property Name="word_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="word1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="difficulty_ID" Type="Int32" />
+          <NavigationProperty Name="dificulty" Relationship="Self.dificultyID" FromRole="words" ToRole="dificulty" />
+          <NavigationProperty Name="word_category" Relationship="Self.category_WORD" FromRole="words" ToRole="word_category" />
+        </EntityType>
+        <Association Name="category_CATEGORY">
+          <End Role="categories" Type="Self.category" Multiplicity="0..1" />
+          <End Role="word_category" Type="Self.word_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="category_ID" />
+            </Principal>
+            <Dependent Role="word_category">
+              <PropertyRef Name="category_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="dificultyID">
+          <End Role="dificulty" Type="Self.dificulty" Multiplicity="0..1" />
+          <End Role="words" Type="Self.word" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dificulty">
+              <PropertyRef Name="dificulty_ID" />
+            </Principal>
+            <Dependent Role="words">
+              <PropertyRef Name="difficulty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="category_WORD">
+          <End Role="words" Type="Self.word" Multiplicity="1" />
+          <End Role="word_category" Type="Self.word_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="words">
+              <PropertyRef Name="word_ID" />
+            </Principal>
+            <Dependent Role="word_category">
+              <PropertyRef Name="word_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="hangman_DBfirstEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="dificulties" EntityType="Self.dificulty" />
+          <EntitySet Name="word_category" EntityType="Self.word_category" />
+          <EntitySet Name="words" EntityType="Self.word" />
+          <AssociationSet Name="category_CATEGORY" Association="Self.category_CATEGORY">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="word_category" EntitySet="word_category" />
+          </AssociationSet>
+          <AssociationSet Name="dificultyID" Association="Self.dificultyID">
+            <End Role="dificulty" EntitySet="dificulties" />
+            <End Role="words" EntitySet="words" />
+          </AssociationSet>
+          <AssociationSet Name="category_WORD" Association="Self.category_WORD">
+            <End Role="words" EntitySet="words" />
+            <End Role="word_category" EntitySet="word_category" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="hangman_DBfirstModelStoreContainer" CdmEntityContainer="hangman_DBfirstEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="hangman_DBfirstModel.category">
+              <MappingFragment StoreEntitySet="categories">
+                <ScalarProperty Name="category_ID" ColumnName="category_ID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dificulties">
+            <EntityTypeMapping TypeName="hangman_DBfirstModel.dificulty">
+              <MappingFragment StoreEntitySet="dificulty">
+                <ScalarProperty Name="dificulty_ID" ColumnName="dificulty_ID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="word_category">
+            <EntityTypeMapping TypeName="hangman_DBfirstModel.word_category">
+              <MappingFragment StoreEntitySet="word_category">
+                <ScalarProperty Name="word_ID" ColumnName="word_ID" />
+                <ScalarProperty Name="category_ID" ColumnName="category_ID" />
+                <ScalarProperty Name="word_category_ID" ColumnName="word_category_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="words">
+            <EntityTypeMapping TypeName="hangman_DBfirstModel.word">
+              <MappingFragment StoreEntitySet="words">
+                <ScalarProperty Name="word_ID" ColumnName="word_ID" />
+                <ScalarProperty Name="word1" ColumnName="word" />
+                <ScalarProperty Name="difficulty_ID" ColumnName="difficulty_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

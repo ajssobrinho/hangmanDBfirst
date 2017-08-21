@@ -1,0 +1,41 @@
+﻿@model IEnumerable<databaseFirstAPP.word>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Word
+        </th>
+        <th>
+            Difficulty
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.word1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dificulty.description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.word_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.word_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.word_ID })
+        </td>
+    </tr>
+}
+
+
+
+</table>
