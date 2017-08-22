@@ -22,6 +22,7 @@ namespace databaseFirstAPP
     
         public int word_ID { get; set; }
         public string word1 { get; set; }
+
         public Nullable<int> difficulty_ID { get; set; }
     
         public virtual dificulty dificulty { get; set; }

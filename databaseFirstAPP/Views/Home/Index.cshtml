@@ -1,26 +1,32 @@
-﻿@model IEnumerable<databaseFirstAPP.word>
+﻿@model databaseFirstAPP.View_Models.hangmanViewModel
 
 @{
     ViewBag.Title = "Hangman - The Game - DB1";
 }
 
 <center>
-    
-    @using (Html.BeginForm())
+
+    @using (Html.BeginForm("hangmanGame", "Home"))
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            Category:<br />
-            @Html.DropDownList("categories_LIST", null, htmlAttributes: new { @class = "form-control" })<br />
-            Dificulty:<br />
-            <select class="form-horizontal" name="dificulty">
-                <option value="1">Easy</option>
-                <option value="2">Medium</option>
-                <option value="3">Hard</option>
-            </select>
-            <input type="submit" value="Let's Play'" class="submit" />
-        </div>
+        <label> Categoria: </label> <select id="Categoria" name="category_field">
+            <option value="random"></option>
+                @foreach (var item_cat in Model.Category)
+                {
+                    <option value="@Html.DisplayFor(modelItem => item_cat.category_ID)">@Html.DisplayFor(modelItem => item_cat.name)</option>
+                }
+
+        </select>
+            <br/>
+            <label> Dificuldade: </label> <select id="Dificuldade" name="difficulty_field">
+                <option value="random"></option>
+                @foreach (var item_dif in Model.Difficulty)
+                {
+                    <option value="@Html.DisplayFor(modelItem => item_dif.dificulty_ID)">@Html.DisplayFor(modelItem => item_dif.description)</option>
+                }
+            </select><br/>
+            <p><input type="submit" value="Rope It" /> </p>
     }
 
 </center>

@@ -37,7 +37,7 @@ namespace databaseFirstAPP.Controllers
             {
                 return HttpNotFound();
             }
-            return View(word);
+            return View();
         }
 
         // GET: words/Create

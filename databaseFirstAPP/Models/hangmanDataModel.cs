@@ -7,14 +7,17 @@ namespace databaseFirstAPP.Models
 {
     public class hangmanDataModel
     {
-        
+
         public int Nr_tries { get; set; }
 
-        public Array Undelines { get; set; }
-
-        public string Word_ID { get; set; }
-
-        public Array Word { get; set; }
+        public char[] Undelines { get; set; }
         
+        public char[] Word_Expl { get; set; }
+
+        public String Word { get; set; }
+
+        public char[] UsedLetters { get; set; }
     }
+    
+
 }

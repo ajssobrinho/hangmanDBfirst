@@ -7,9 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using databaseFirstAPP;
+using databaseFirstAPP.Models;
+using databaseFirstAPP.View_Models;
 
 namespace databaseFirstAPP.Controllers
 {
+
     public class HomeController : Controller
     {
 
@@ -19,37 +22,56 @@ namespace databaseFirstAPP.Controllers
         public ActionResult Index()
         {
 
-            ViewBag.categories_LIST = new SelectList(db.categories, "category_ID", "name");
-            return View();
+            //ViewBag.categories_LIST = new SelectList(db.categories, "category_ID", "name");
+
+            hangmanViewModel hangmanModelInst = new hangmanViewModel()
+            {
+
+                Category = db.categories.ToList(),
+
+                Difficulty = db.dificulties.ToList()
+
+            };
+
+            return View(hangmanModelInst);
         }
 
         //POST from selecting difficulty and category
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "category_ID,difficulty_ID")] word dific, category categ )
+        public ActionResult hangmanGame(int category_field, int difficulty_field)
         {
 
-            var words_match = (from word in db.words
-                               join cat in db.word_category
-                               on word.word_ID equals cat.word_ID
+            var words_match = (
 
-                               where word.difficulty_ID == dific.difficulty_ID
-                               where cat.category_ID == categ.category_ID
-                               select  word.word1
-                               ).ToList();
+                                   from word in db.words
 
-            var hangmanModel = new Models.hangmanDataModel();
-
-            Random rand_number = new Random();           
-            
-            int array_pos = rand_number.Next(words_match.Count());
-
-            hangmanModel.Word_ID = words_match.ElementAt(array_pos);
+                                   join cat in db.word_category
+                                   on word.word_ID equals cat.word_ID
 
 
+                                   where word.difficulty_ID == difficulty_field
+                                   where cat.category_ID == category_field
 
-            return View("gameBoard", hangmanModel );
-            
+                                   select word.word1
+
+                                   ).ToList();
+
+
+            Random rand_number = new Random();
+
+            ViewBag.dados = words_match.ElementAt(rand_number.Next(words_match.Count()));
+
+
+            hangmanDataModel HangmanDataModel = new hangmanDataModel();
+
+            HangmanDataModel.Word = words_match.ElementAt(rand_number.Next(words_match.Count()));
+
+
+
+
+            return View("gameBoard", HangmanDataModel);
+
 
 
         }
