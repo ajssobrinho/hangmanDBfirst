@@ -9,10 +9,34 @@
 <h2>gameBoard</h2>
 <br />
 <br />
+<br />
 <center>
-    <table>
+    <div style="text-align:center;">
+        @*@Model.Word*@
 
-        @Model.Word
+        @foreach (var item_cat in Model.Unknown_letters)
+            {
+            <div style="font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px;  display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
+        }
 
-    </table>
+    </div>
+
+
+
+    <div>
+
+        <br/>
+        <br />
+        <br />
+        @using (Html.BeginForm("hangmanGame", "Home"))
+        {
+            @Html.AntiForgeryToken()
+
+            <input name="guess_letter" type="text" size="1" />
+            <p><input type="submit" value="Try your luck!" /> </p>
+        }
+
+
+    </div>
+
 </center>

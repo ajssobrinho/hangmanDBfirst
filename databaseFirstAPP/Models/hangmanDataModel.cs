@@ -10,7 +10,7 @@ namespace databaseFirstAPP.Models
 
         public int Nr_tries { get; set; }
 
-        public char[] Undelines { get; set; }
+        public char[] Unknown_letters { get; set; }
         
         public char[] Word_Expl { get; set; }
 

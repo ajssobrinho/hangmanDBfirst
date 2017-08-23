@@ -67,12 +67,20 @@ namespace databaseFirstAPP.Controllers
 
             HangmanDataModel.Word = words_match.ElementAt(rand_number.Next(words_match.Count()));
 
+            HangmanDataModel.Word_Expl = HangmanDataModel.Word.ToCharArray();
 
+            HangmanDataModel.Unknown_letters = new char[HangmanDataModel.Word_Expl.Length];
+            
+                for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
+                {
+
+                    HangmanDataModel.Unknown_letters[i] = '?';
+
+                };
 
 
             return View("gameBoard", HangmanDataModel);
-
-
+            
 
         }
 
