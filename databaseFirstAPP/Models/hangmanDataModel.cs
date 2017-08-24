@@ -16,7 +16,10 @@ namespace databaseFirstAPP.Models
 
         public String Word { get; set; }
 
-        public char[] UsedLetters { get; set; }
+        public List<char> Used_letters { get; set; }
+
+        public String Error_msg_word_al_inserted { get; set; }
+
     }
     
 
