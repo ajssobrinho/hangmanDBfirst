@@ -17,7 +17,7 @@
         @foreach (var item_cat in Model.Unknown_letters)
             {
             <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
-        }
+        };
 
 
 
@@ -28,10 +28,12 @@
     <div style="text-align:center;">
 
 
-        @foreach (var item_cat in Model.Word_Expl)
+        @foreach (var words_exp in Model.Word_Expl)
             {
-            <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
-        }
+            <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">
+        @Html.DisplayFor(modelItem => words_exp)
+            </div>
+        };
 
 
 
@@ -42,26 +44,34 @@
     <br />
     <br />
     <br />
-
+ 
     @if (Model.Used_letters != null)
     {
 
-        foreach (var item_cat in Model.Used_letters)
+        foreach (var u_letters in Model.Used_letters)
         {
-            <div style="font-family:monospace; font-size: 20px; width:150px; padding:10px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
+            <div style="font-family:monospace; font-size: 20px; width:150px; padding:10px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => u_letters)</div>
         }
-        <br />
-        @Model.Nr_tries;
-    }
 
+        <br />
+        <br />
+        <br />
+        <br />
+        //Number of tries available
+        @Model.Nr_tries;
+        <br />
+        <br />
+    }
+        
     <div>
         <br />
         <br />
         <br />
         <br />
+
         @if (Model.Error_msg_word_al_inserted != null)
         {
-            @Model.Error_msg_word_al_inserted;
+                      @Model.Error_msg_word_al_inserted
         }
 
         <br />
@@ -70,20 +80,15 @@
         <br />
         <br />
 
-        @using (Html.BeginForm("gameBoard", "Home", Model))
+        @using (Html.BeginForm("gameBoard", "Home"))
         {
 
-            @Html.AntiForgeryToken()
-
-
+            @*@Html.AntiForgeryToken()*@
 
             // 1----- passing word letter array
-            foreach (var letter1 in Model.Word_Expl)
-            {
-                @Html.Hidden("exp_letter_array", letter1)
-            }
+            @Html.HiddenFor(m => m.Word);
 
-
+            @Html.HiddenFor(m => m.Nr_tries);
             // 2----- passing unknown letter array
             foreach (var letter2 in Model.Unknown_letters)
             {
@@ -93,14 +98,13 @@
 
 
             // 3-----number of tries
-            @Html.HiddenFor(m => m.Nr_tries)
+
 
 
 
             // 4-----list of used letters
             if (Model.Used_letters != null)
             {
-                // passing list of used letters
                 foreach (var letter3 in Model.Used_letters)
                 {
                     @Html.Hidden("letras_usadas", letter3)
@@ -109,7 +113,7 @@
 
 
 
-          
+
 
             // 5-----Letter used
             <input style="font-family:monospace; font-size:15px;" name="letter" type="text" size="1" maxlength="1" pattern="[a-z]" required />
