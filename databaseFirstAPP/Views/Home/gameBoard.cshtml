@@ -17,7 +17,7 @@
         @foreach (var item_cat in Model.Unknown_letters)
             {
             <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
-        };
+        }
 
 
 
@@ -33,7 +33,7 @@
             <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">
         @Html.DisplayFor(modelItem => words_exp)
             </div>
-        };
+        }
 
 
 
@@ -80,27 +80,22 @@
         <br />
         <br />
 
+
+
+
         @using (Html.BeginForm("gameBoard", "Home"))
         {
 
-            @*@Html.AntiForgeryToken()*@
+            
 
             // 1----- passing word letter array
-            @Html.HiddenFor(m => m.Word);
+            @Html.HiddenFor(m => m.Word)
 
-            @Html.HiddenFor(m => m.Nr_tries);
             // 2----- passing unknown letter array
             foreach (var letter2 in Model.Unknown_letters)
             {
                 @Html.Hidden("hid_letter_array", letter2)
             }
-
-
-
-            // 3-----number of tries
-
-
-
 
             // 4-----list of used letters
             if (Model.Used_letters != null)
@@ -111,6 +106,8 @@
                 }
             }
 
+            // 3-----number of tries
+            @Html.HiddenFor(m => m.Nr_tries) 
 
 
 

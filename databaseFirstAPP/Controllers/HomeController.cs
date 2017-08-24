@@ -105,15 +105,7 @@ namespace databaseFirstAPP.Controllers
 
 
 
-
-
-
-
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult gameBoard(String word, int Nr_tries, char[] hid_letter_array, List<char> letras_usadas, char letter)
+        public ActionResult gameBoard(String word, char[] hid_letter_array, List<char> letras_usadas, int Nr_tries, String letter)
         {
 
             hangmanDataModel HangmanDataModel = new hangmanDataModel();
@@ -128,18 +120,15 @@ namespace databaseFirstAPP.Controllers
 
             for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
             {
-                if (HangmanDataModel.Word_Expl[i] == letter)
+                if (HangmanDataModel.Word_Expl[i] == letter[0])
                 {
 
-                    HangmanDataModel.Unknown_letters[i] = letter;
+                    HangmanDataModel.Unknown_letters[i] = letter[0];
 
                     mistake = false;
-
                 }
-
             }
-
-
+            
             if (mistake == true)
             {
 
@@ -147,33 +136,33 @@ namespace databaseFirstAPP.Controllers
 
             }
 
+            //checked and working----------------------------------------
 
+            if (HangmanDataModel.Used_letters != null)
+            {
 
+                if (HangmanDataModel.Used_letters.Contains(letter[0]) == true)
+                {
+                    HangmanDataModel.Error_msg_word_al_inserted = "The letter was already tried...";
+                }else
+                {
+                    HangmanDataModel.Used_letters.Add(letter[0]);
+                }
 
-
-            if (HangmanDataModel.Used_letters == null)
+            }
+            else
             {
                 List<char> u_letters = new List<char>();
 
                 HangmanDataModel.Used_letters = u_letters;
 
-                HangmanDataModel.Used_letters.Add(letter);
-
-            }
-            else
-            {
-                if (HangmanDataModel.Used_letters.Contains(letter))
-                {
-                    HangmanDataModel.Error_msg_word_al_inserted = "The letter was already tried...";
-                }
-                else
-                {
-                    HangmanDataModel.Used_letters.Add(letter);
-                }
+                HangmanDataModel.Used_letters.Add(letter[0]);
             }
 
 
 
+
+            ModelState.Clear();
 
 
             return View("gameBoard", HangmanDataModel);
