@@ -105,15 +105,16 @@ namespace databaseFirstAPP.Controllers
 
 
 
-        public ActionResult gameBoard(String word, char[] hid_letter_array, List<char> letras_usadas, int Nr_tries, String letter)
+        public ActionResult gameBoard(String Word, char[] hid_letter_array, List<char> letras_usadas, int Nr_tries, String letter)
         {
 
             hangmanDataModel HangmanDataModel = new hangmanDataModel();
             //re-setting the var in their propper places in the model.
 
-            HangmanDataModel.Word_Expl = word.ToCharArray(); ;
+            HangmanDataModel.Word_Expl = Word.ToCharArray();
             HangmanDataModel.Unknown_letters = hid_letter_array;
             HangmanDataModel.Used_letters = letras_usadas;
+            HangmanDataModel.Word = Word;
 
             bool mistake = true;
 
