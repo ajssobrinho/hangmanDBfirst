@@ -4,23 +4,26 @@
     ViewBag.Title = "Hangman - The Game - DB1";
 }
 
+
+
 <center>
-    <br /><br />
-    @using (Html.BeginForm("hangmanGame", "Home"))
-    {
-        @Html.AntiForgeryToken()
-
-        <label> Categoria: </label> <select id="Categoria" name="category_field">
-            <option value="random"></option>
-            @foreach (var item_cat in Model.Category)
-                {
-                <option value="@Html.DisplayFor(modelItem => item_cat.category_ID)">@Html.DisplayFor(modelItem => item_cat.name)</option>
-            }
-
-        </select>
         <br /><br />
+        @using (Html.BeginForm("hangmanGame", "Home"))
+        {
+            @Html.AntiForgeryToken()
+
+            <label> Categoria: </label> <select id="Categoria" name="category_field">
+                <option value="-1" selected>Random</option>
+
+                @foreach (var item_cat in Model.Category)
+                {
+                    <option value="@Html.DisplayFor(modelItem => item_cat.category_ID)">@Html.DisplayFor(modelItem => item_cat.name)</option>
+                }
+
+            </select>
+            <br /><br />
             <label> Dificuldade: </label> <select id="Dificuldade" name="difficulty_field">
-                <option value="random"></option>
+                <option value="-1" selected>Random</option>
 
                 @foreach (var item_dif in Model.Difficulty)
                 {
@@ -29,12 +32,16 @@
 
             </select><br /><br />
             <p><input type="submit" value="Rope It" /> </p>
-    }
+        }
 
-    <br/>
-    <br />
-    <br />
-    <br />
-    @ViewBag.Erro
+        <br />
+        <br />
+        <br />
+        <br />
+        @ViewBag.Erro
+
+
+
+
 
 </center>

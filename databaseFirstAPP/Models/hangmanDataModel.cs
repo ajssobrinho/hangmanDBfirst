@@ -20,6 +20,8 @@ namespace databaseFirstAPP.Models
 
         public String Error_msg_word_al_inserted { get; set; }
 
+        public int Win { get; set; }
+
     }
     
 

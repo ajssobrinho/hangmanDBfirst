@@ -1,8 +1,20 @@
 ﻿@model databaseFirstAPP.Models.hangmanDataModel
 
 @{
-
     ViewBag.Title = "gameBoard";
+}
+
+
+
+@if (Model.Win >= 1)
+{
+
+    <center>
+        <div style="clear:both">
+        <span style=" font-size:100px;">Congratulations, you just won the game.</span>
+        @Html.ActionLink("Jogar de novo", "Index")
+        </div>
+    </center>
 
 }
 
@@ -11,118 +23,123 @@
 <br />
 <br />
 <center>
-    <div style="text-align:center;">
+    <div id="container" style="visibility:visible">
+        <div style="text-align:center;">
 
 
-        @foreach (var item_cat in Model.Unknown_letters)
+            @foreach (var item_cat in Model.Unknown_letters)
             {
-            <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
-        }
-
-
-
-    </div>
-    <br/>
-    <br />
-    <br />
-    <div style="text-align:center;">
-
-
-        @foreach (var words_exp in Model.Word_Expl)
-            {
-            <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">
-        @Html.DisplayFor(modelItem => words_exp)
-            </div>
-        }
-
-
-
-    </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
- 
-    @if (Model.Used_letters != null)
-    {
-
-        foreach (var u_letters in Model.Used_letters)
-        {
-            <div style="font-family:monospace; font-size: 20px; width:150px; padding:10px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => u_letters)</div>
-        }
-
-        <br />
-        <br />
-        <br />
-        <br />
-        //Number of tries available
-        @Model.Nr_tries;
-        <br />
-        <br />
-    }
-        
-    <div>
-        <br />
-        <br />
-        <br />
-        <br />
-
-        @if (Model.Error_msg_word_al_inserted != null)
-        {
-                      @Model.Error_msg_word_al_inserted
-        }
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
-
-
-
-        @using (Html.BeginForm("gameBoard", "Home"))
-        {
-
-            
-
-            // 1----- passing word letter array
-            @Html.HiddenFor(m => m.Word)
-
-            // 2----- passing unknown letter array
-            foreach (var letter2 in Model.Unknown_letters)
-            {
-                @Html.Hidden("hid_letter_array", letter2)
+                <div style="font-family:monospace; font-size: 15px; width:140px; padding:15px; margin:10px 2px 10px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => item_cat)</div>
             }
 
-            // 4-----list of used letters
-            if (Model.Used_letters != null)
+
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <div style="text-align:center;">
+
+
+            @foreach (var words_exp in Model.Word_Expl)
             {
-                foreach (var letter3 in Model.Used_letters)
+                <div style="font-family:monospace; font-size: 15px; width:150px; padding:20px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">
+                    @Html.DisplayFor(modelItem => words_exp)
+                </div>
+            }
+
+
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        @if (Model.Used_letters != null)
+        {
+
+            foreach (var u_letters in Model.Used_letters)
+            {
+                <div style="font-family:monospace; font-size: 20px; width:150px; padding:10px; margin:20px 2px 20px 20px; display:inline; border-bottom:1px solid black;">@Html.DisplayFor(modelItem => u_letters)</div>
+            }
+
+            <br />
+            <br />
+            <br />
+            <br />
+            //Number of tries available
+            @Model.Nr_tries;
+            <br />
+            <br />
+        }
+
+        <div>
+            <br />
+            <br />
+            <br />
+            <br />
+
+            @if (Model.Error_msg_word_al_inserted != null)
+            {
+                @Model.Error_msg_word_al_inserted
+            }
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
+
+
+
+            @using (Html.BeginForm("gameBoard", "Home"))
+            {
+
+
+
+                // 1----- passing word letter array
+                @Html.HiddenFor(m => m.Word)
+
+
+                // 2----- passing unknown letter array
+                foreach (var letter2 in Model.Unknown_letters)
                 {
-                    @Html.Hidden("letras_usadas", letter3)
+                    @Html.Hidden("hid_letter_array", letter2)
                 }
+
+
+                // 4-----list of used letters
+                if (Model.Used_letters != null)
+                {
+                    foreach (var letter3 in Model.Used_letters)
+                    {
+                        @Html.Hidden("letras_usadas", letter3)
+                    }
+                }
+
+
+                // 3-----number of tries
+                @Html.HiddenFor(m => m.Nr_tries)
+
+
+
+
+                // 5-----Letter used
+                <input style="font-family:monospace; font-size:15px;" name="Letter" type="text" size="1" maxlength="1" pattern="[a-z]" required />
+
+
+                <br />
+                <br />
+                <p><input type="submit" value="Try your luck!" /> </p>
+
             }
 
-            // 3-----number of tries
-            @Html.HiddenFor(m => m.Nr_tries) 
 
-
-
-
-            // 5-----Letter used
-            <input style="font-family:monospace; font-size:15px;" name="letter" type="text" size="1" maxlength="1" pattern="[a-z]" required />
-
-
-            <br />
-            <br />
-            <p><input type="submit" value="Try your luck!" /> </p>
-
-        }
-
-
+        </div>
     </div>
 
 </center>

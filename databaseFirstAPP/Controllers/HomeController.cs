@@ -47,65 +47,133 @@ namespace databaseFirstAPP.Controllers
         //POST from selecting difficulty and category
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult hangmanGame(int category_field, int difficulty_field)
+        public ActionResult hangmanGame(Nullable<int> category_field, Nullable<int> difficulty_field)
         {
-
-            var words_match = (
-
-                                   from word in db.words
-
-                                   join cat in db.word_category
-                                   on word.word_ID equals cat.word_ID
-
-
-                                   where word.difficulty_ID == difficulty_field
-                                   where cat.category_ID == category_field
-
-                                   select word.word1
-
-                                   ).ToList();
-
-
-            Random rand_number = new Random();
-
-            if (words_match.Count() != 0)
+            if (category_field == null || difficulty_field == null)
+            {
+                return View("index");
+            }
+            else
             {
 
-
-                hangmanDataModel HangmanDataModel = new hangmanDataModel();
-
-                HangmanDataModel.Word = words_match.ElementAt(rand_number.Next(words_match.Count()));
-
-                HangmanDataModel.Word_Expl = HangmanDataModel.Word.ToCharArray();
-                HangmanDataModel.Unknown_letters = new char[HangmanDataModel.Word_Expl.Length];
-
-                for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
+                if (category_field <= -1 || difficulty_field <= -1)
                 {
 
-                    HangmanDataModel.Unknown_letters[i] = '?';
+                    var words_match = (
+                                       from word in db.words
+
+                                       select word.word1
+
+                                       ).ToList();
+
+
+                    Random rand_number = new Random();
+
+
+
+
+                    if (words_match.Count() != 0)
+                    {
+
+                        hangmanDataModel HangmanDataModel = new hangmanDataModel();
+
+                        HangmanDataModel.Word = words_match.ElementAt(rand_number.Next(words_match.Count()));
+
+                        HangmanDataModel.Word_Expl = HangmanDataModel.Word.ToCharArray();
+                        HangmanDataModel.Unknown_letters = new char[HangmanDataModel.Word_Expl.Length];
+
+                        for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
+                        {
+
+                            HangmanDataModel.Unknown_letters[i] = '?';
+
+                        }
+
+
+                        HangmanDataModel.Nr_tries = 5;
+
+                        return View("gameBoard", HangmanDataModel);
+                    }
+
+                    else
+                    {
+                        ViewBag.Erro = "Sorry, our database doesn't have a word with the selected parameter.";
+
+                        return View("index", ViewBag);
+
+                    }
+
 
                 }
 
+                else
+                {
 
-                HangmanDataModel.Nr_tries = 0;
 
-                return View("gameBoard", HangmanDataModel);
+                    var words_match = (
+                                           from word in db.words
+
+                                           join cat in db.word_category
+                                           on word.word_ID equals cat.word_ID
+
+
+                                           where word.difficulty_ID == difficulty_field
+                                           where cat.category_ID == category_field
+
+                                           select word.word1
+
+                                           ).ToList();
+
+
+
+
+                    Random rand_number = new Random();
+
+
+
+
+                    if (words_match.Count() != 0)
+                    {
+
+                        hangmanDataModel HangmanDataModel = new hangmanDataModel();
+
+                        HangmanDataModel.Word = words_match.ElementAt(rand_number.Next(words_match.Count()));
+
+                        HangmanDataModel.Word_Expl = HangmanDataModel.Word.ToCharArray();
+                        HangmanDataModel.Unknown_letters = new char[HangmanDataModel.Word_Expl.Length];
+
+                        for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
+                        {
+
+                            HangmanDataModel.Unknown_letters[i] = '?';
+
+                        }
+
+
+                        HangmanDataModel.Nr_tries = 5;
+
+                        HangmanDataModel.Win = 0;
+
+                        return View("gameBoard", HangmanDataModel);
+                    }
+
+                    else
+                    {
+                        ViewBag.Erro = "Sorry, our database doesn't have a word with the selected parameter.";
+
+                        return View("index", ViewBag);
+
+                    }
+
+
+                }
             }
-
-            else
-            {
-                ViewBag.Erro = "Sorry, our database doesn't have a word with the selected parameter.";
-
-                return View("index", ViewBag);
-
-            }
-
         }
 
 
 
 
-        public ActionResult gameBoard(String Word, char[] hid_letter_array, List<char> letras_usadas, int Nr_tries, String letter)
+        public ActionResult gameBoard(String Word, char[] hid_letter_array, List<char> letras_usadas, Nullable<int> Nr_tries , String Letter)
         {
 
             hangmanDataModel HangmanDataModel = new hangmanDataModel();
@@ -118,36 +186,63 @@ namespace databaseFirstAPP.Controllers
 
             bool mistake = true;
 
-
             for (int i = 0; i < HangmanDataModel.Word_Expl.Length; i++)
             {
-                if (HangmanDataModel.Word_Expl[i] == letter[0])
+                if (HangmanDataModel.Word_Expl[i] == Letter[0])
                 {
 
-                    HangmanDataModel.Unknown_letters[i] = letter[0];
+                    HangmanDataModel.Unknown_letters[i] = Letter[0];
 
                     mistake = false;
                 }
             }
-            
+
+            bool Winning = false;
+
+
+            for (int i = 0; i < HangmanDataModel.Unknown_letters.Length; i++)
+            {
+
+                if (HangmanDataModel.Unknown_letters[i] != '?')
+                {
+
+                    Winning = true;
+
+                }
+                else {
+                    Winning = false;
+                }
+
+
+            }
+
             if (mistake == true)
             {
 
-                HangmanDataModel.Nr_tries = HangmanDataModel.Nr_tries + 1;
+                HangmanDataModel.Nr_tries = HangmanDataModel.Nr_tries - 1;
 
             }
+
+
+            if (Winning == true) {
+
+                HangmanDataModel.Win = 1;
+            }
+
+
 
             //checked and working----------------------------------------
 
             if (HangmanDataModel.Used_letters != null)
             {
 
-                if (HangmanDataModel.Used_letters.Contains(letter[0]) == true)
+                if (HangmanDataModel.Used_letters.Contains(Letter[0]) == true)
                 {
                     HangmanDataModel.Error_msg_word_al_inserted = "The letter was already tried...";
-                }else
+                }
+                else
                 {
-                    HangmanDataModel.Used_letters.Add(letter[0]);
+                    HangmanDataModel.Used_letters.Add(Letter[0]);
                 }
 
             }
@@ -157,17 +252,12 @@ namespace databaseFirstAPP.Controllers
 
                 HangmanDataModel.Used_letters = u_letters;
 
-                HangmanDataModel.Used_letters.Add(letter[0]);
+                HangmanDataModel.Used_letters.Add(Letter[0]);
             }
-
-
-
-
             ModelState.Clear();
 
 
             return View("gameBoard", HangmanDataModel);
-
         }
 
 
