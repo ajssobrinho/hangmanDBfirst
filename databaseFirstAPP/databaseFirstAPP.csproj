@@ -205,6 +205,12 @@
       <DependentUpon>hangmanModel.edmx</DependentUpon>
       <LastGenOutput>hangmanModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Media\Img\picture1.png" />
+    <Content Include="Media\Img\picture2.png" />
+    <Content Include="Media\Img\picture3.png" />
+    <Content Include="Media\Img\picture4.png" />
+    <Content Include="Media\Img\picture5.png" />
+    <Content Include="Media\Img\picture6.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -266,7 +272,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Media\Img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
